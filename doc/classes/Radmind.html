@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Radmind</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Radmind</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/radmind_rb.html">
+                radmind.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000043">convert</a>&nbsp;&nbsp;
+      <a href="#M000044">fetch</a>&nbsp;&nbsp;
+      <a href="#M000042">readK</a>&nbsp;&nbsp;
+      <a href="#M000040">tools?</a>&nbsp;&nbsp;
+      <a href="#M000041">updateK</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000043" class="method-detail">
+        <a name="M000043"></a>
+
+        <div class="method-heading">
+          <a href="Radmind.src/M000043.html" target="Code" class="method-signature"
+            onclick="popupCode('Radmind.src/M000043.html');return false;">
+          <span class="method-name">convert</span><span class="method-args">(args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Implements transcript conversion
+</p>
+<ul>
+<li>In order to retreive the transcript&#8216;s payload (loadset), the
+transcript must be converted from a creatable transcript to an appliable
+one.
+
+</li>
+<li>The newly converted transcript is stored in the root of the pkgproject
+
+</li>
+</ul>
+        </div>
+      </div>
+
+      <div id="method-M000044" class="method-detail">
+        <a name="M000044"></a>
+
+        <div class="method-heading">
+          <a href="Radmind.src/M000044.html" target="Code" class="method-signature"
+            onclick="popupCode('Radmind.src/M000044.html');return false;">
+          <span class="method-name">fetch</span><span class="method-args">(args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Implements a <a href="Radmind.html">Radmind</a> lapply using the pkgroot as
+it&#8216;s target
+</p>
+<ul>
+<li>Uses the converted transcript to populate the pkgroot with the
+transcript&#8216;s payload
+
+</li>
+</ul>
+        </div>
+      </div>
+
+      <div id="method-M000042" class="method-detail">
+        <a name="M000042"></a>
+
+        <div class="method-heading">
+          <a href="Radmind.src/M000042.html" target="Code" class="method-signature"
+            onclick="popupCode('Radmind.src/M000042.html');return false;">
+          <span class="method-name">readK</span><span class="method-args">(path = RADMINDPATH)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Parse the command.K and K-in-K files
+</p>
+<ul>
+<li>Returns an array containing a list of available transcripts
+
+</li>
+<li>Unimplemented
+
+</li>
+</ul>
+        </div>
+      </div>
+
+      <div id="method-M000040" class="method-detail">
+        <a name="M000040"></a>
+
+        <div class="method-heading">
+          <a href="Radmind.src/M000040.html" target="Code" class="method-signature"
+            onclick="popupCode('Radmind.src/M000040.html');return false;">
+          <span class="method-name">tools?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Ensure the <a href="Radmind.html">Radmind</a> tools are installed
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000041" class="method-detail">
+        <a name="M000041"></a>
+
+        <div class="method-heading">
+          <a href="Radmind.src/M000041.html" target="Code" class="method-signature"
+            onclick="popupCode('Radmind.src/M000041.html');return false;">
+          <span class="method-name">updateK</span><span class="method-args">(args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Implements a <a href="Radmind.html">Radmind</a> ktcheck
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

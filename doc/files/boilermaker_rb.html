@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: boilermaker.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>boilermaker.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>boilermaker.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Tue Jan 26 15:01:55 -0800 2010</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1><a href="../classes/Boilermaker.html">Boilermaker</a></h1>
+<h2>Synopsis</h2>
+<h3>Overview</h3>
+<pre>
+ A simple utility for working with Apple's Packagemaker. Boilermaker
+ makes it easy to design consistent &amp; maintainable Packagemaker
+ workflows by automatically generating boilerplate resource files
+ based on a simple YAML configuration file. Once configured, you can
+ begin building or distributing installers using simple commands.
+</pre>
+<h3>Revision Control</h3>
+<pre>
+ When used in conjunction with a common revision control system like
+ GIT, Boilermaker can be a powerful allie.
+</pre>
+<h3><a href="../classes/Radmind.html">Radmind</a></h3>
+<pre>
+ In addition, Boilermaker also contains a special feature set for
+ fetching and packaging Radmind transcripts. See below for examples
+ on usage.
+</pre>
+<h2>Usage</h2>
+<pre>
+ Usage: boilermaker [options]
+ --Execute boilermaker without options to show usage details.
+</pre>
+<h2>Options</h2>
+<pre>
+ -Q, --quickpkg &lt;app&gt;             Create a quick application distribution
+ -C, --createproj &lt;dir&gt;           Create a project directory
+ -D, --projectdir &lt;dir&gt;           Specify a project directory to work with (default is $PWD)
+ -K, --ktcheck                    Update the Radmind client command file
+ -t, --tconvert &lt;transcript&gt;      Convert a createable transcript to an appliable transcript
+ -f, --fetch &lt;transcript&gt;         Fetch a converted Radmind transcript
+ -h, --radhost &lt;host&gt;             Specify the Radmind server host
+ -b, --boil                       Generate boilerplate
+ -p, --package                    Package your project
+ -r, --rollup                     Create a disk image of your package
+ -w, --secure &lt;level&gt;             Use security level 0, 1 or 2 for Radmind operations
+ -c, --cksum &lt;hash&gt;               Update the Radmind client command file
+ -v, --version                    Display version
+     --help                       Show this message
+</pre>
+<h2>Examples</h2>
+<h3>Quick Packaging</h3>
+<h5></h5>
+<pre>
+ Quick packaging allows you to generate a pkgdmg from:
+
+   1. An application bundle (ie. /Applications/Firefox.app)
+   2. A folder containing an application bundle (ie. /Applications/Pacifist).
+</pre>
+<h6>NOTE: When packaging a folder, it must contain exactly one application bundle.</h6>
+<h6></h6>
+<pre>
+ The resulting dmg file will contain a Mac OS X 10.4 style package. When complete, Boilermaker
+ will place the file on your Desktop for easy access.
+</pre>
+<h5>Create a quick application distribution</h5>
+<pre>
+   boilermaker -Q /path/to/my_application.app
+   boilermaker -Q /Applications/Firefox.app
+   boilermaker -Q ~/Downloads/Cyberduck.app
+</pre>
+<h5>Create a quick distribution from an application&#8216;s parent directory</h5>
+<pre>
+   boilermaker -Q /Applications/Pacifist
+</pre>
+<h6>NOTE: ALL BoilermakerQuick packages are non-relocatable.</h6>
+<h6></h6>
+<h3>Project Creation</h3>
+<h5></h5>
+<h5>Create a new <a href="../classes/Boilermaker.html">Boilermaker</a> project</h5>
+<pre>
+   boilermaker -C ./mynewproject
+</pre>
+<h3>Standard Operations</h3>
+<h5></h5>
+<pre>
+ All Boilermaker operations will assume $PWD if the -D flag is not specified.
+</pre>
+<h5>Generate boilerplate resource files</h5>
+<pre>
+   boilermaker -D ./mynewproject -b
+   boilermaker -b
+</pre>
+<h5>Package up the project&#8216;s pkgroot</h5>
+<pre>
+   boilermaker -D ./mynewproject -p
+   boilermaker -p
+</pre>
+<h5>Roll-up the package into a disk image</h5>
+<pre>
+   boilermaker -D ./mynewproject -r
+   boilermaker -r
+</pre>
+<h3><a href="../classes/Radmind.html">Radmind</a> Features</h3>
+<h5></h5>
+<h5>Update the <a href="../classes/Radmind.html">Radmind</a> command file</h5>
+<pre>
+   boilermaker -K -w1 -csha1 -hhost.radmind.com
+</pre>
+<h5>Convert a <a href="../classes/Radmind.html">Radmind</a> transcript</h5>
+<pre>
+   boilermaker -D ./mynewproject -t /var/radmind/client/foo.T
+   boilermaker -t /var/radmind/client/foo.T
+</pre>
+<h5>Fetch a <a href="../classes/Radmind.html">Radmind</a> transcript</h5>
+<pre>
+   boilermaker -D ./mynewproject -f ./mynewproject/foo.T -w1 -csha1 -hhost.radmind.com
+   boilermaker -f ./mynewproject/foo.T -w1 -csha1 -hhost.radmind.com
+</pre>
+<h2>Author</h2>
+<pre>
+  Brian Warsing
+</pre>
+<h2>Copyright</h2>
+<pre>
+  Copyright © 2010 Simon Fraser University. Licensed under the Apache License:
+  http://www.apache.org/licenses/LICENSE-2.0
+</pre>
+
+    </div>
+
+    <div id="requires-list">
+      <h3 class="section-bar">Required files</h3>
+
+      <div class="name-list">
+      boilermaker/boilermakerlib&nbsp;&nbsp;
+      boilermaker/pkgproj&nbsp;&nbsp;
+      boilermaker/quickpkg&nbsp;&nbsp;
+      boilermaker/radmind&nbsp;&nbsp;
+      date&nbsp;&nbsp;
+      erb&nbsp;&nbsp;
+      etc&nbsp;&nbsp;
+      optparse&nbsp;&nbsp;
+      osx/cocoa&nbsp;&nbsp;
+      pathname&nbsp;&nbsp;
+      pp&nbsp;&nbsp;
+      rdoc/usage&nbsp;&nbsp;
+      time&nbsp;&nbsp;
+      yaml&nbsp;&nbsp;
+      </div>
+    </div>
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="../classes/OSX.html">OSX</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">BM_VERSION</td>
+          <td>=</td>
+          <td class="context-item-value">'0.4.9'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RADMINDTOOLSPATH</td>
+          <td>=</td>
+          <td class="context-item-value">'/usr/local/bin/'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RADMINDTOOLS</td>
+          <td>=</td>
+          <td class="context-item-value">['fsdiff', 'ktcheck', 'lapply', 'lcksum', 'lcreate', 'lfdiff', 'lmerge', 'lsort', 'twhich']</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RADMINDPATH</td>
+          <td>=</td>
+          <td class="context-item-value">'/var/radmind/client/'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">PKGMAKER</td>
+          <td>=</td>
+          <td class="context-item-value">'/Developer/usr/bin/packagemaker'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">HDIUTIL</td>
+          <td>=</td>
+          <td class="context-item-value">'/usr/bin/hdiutil'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">TEMPLATES</td>
+          <td>=</td>
+          <td class="context-item-value">'/Library/Ruby/Site/1.8/boilermaker/templates'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">RESOURCES</td>
+          <td>=</td>
+          <td class="context-item-value">'/Library/Ruby/Site/1.8/boilermaker/resources'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">SCRIPTS</td>
+          <td>=</td>
+          <td class="context-item-value">'/Library/Ruby/Site/1.8/boilermaker/scripts'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">TAG</td>
+          <td>=</td>
+          <td class="context-item-value">&quot;Package created using Boilermaker, version &quot; + BM_VERSION</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">TMP</td>
+          <td>=</td>
+          <td class="context-item-value">'/tmp'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">APPS</td>
+          <td>=</td>
+          <td class="context-item-value">'/Applications'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">INFO</td>
+          <td>=</td>
+          <td class="context-item-value">'/Contents/Info.plist'</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">TOKENDEFS</td>
+          <td>=</td>
+          <td class="context-item-value">'/Contents/Resources/TokenDefinitions.plist'</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

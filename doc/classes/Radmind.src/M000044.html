@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>fetch (Radmind)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File radmind.rb, line 82</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fetch</span> (<span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">pkgroot</span> = <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:projectdir</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'/pkgroot'</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-identifier">pkgroot</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">RadmindErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Could not chdir to pkgroot: #{pkgroot}&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Current directory: #{Dir.pwd}&quot;</span>
+    
+    <span class="ruby-comment cmt"># Radmind.prefetch(pkgroot, args[:fetch])</span>
+
+    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Fetching transcript...&quot;</span>
+    
+    <span class="ruby-identifier">cmd</span> = [<span class="ruby-constant">RADMINDTOOLSPATH</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'lapply'</span>, <span class="ruby-value str">'-%'</span>, <span class="ruby-value str">'-C'</span>, <span class="ruby-value str">'-h'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:radhost</span>]]
+    <span class="ruby-identifier">cmd</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'-c'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:cksum</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:cksum</span>]
+    <span class="ruby-identifier">cmd</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'-w'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:secure</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:secure</span>]
+    <span class="ruby-identifier">cmd</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">args</span>[<span class="ruby-identifier">:fetch</span>]
+
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>(<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>))
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">RadmindErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;There was a problem executing the specified cmd: #{$?}&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">$?</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">256</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">$?</span>
+    <span class="ruby-keyword kw">end</span>
+    
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

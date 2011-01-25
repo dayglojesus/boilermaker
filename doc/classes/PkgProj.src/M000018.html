@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>rollup (PkgProj)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File pkgproj.rb, line 109</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rollup</span>
+    <span class="ruby-identifier">pkgroot</span> = <span class="ruby-ivar">@projectdir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/pkgroot'</span>
+    
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-ivar">@projectdir</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Could not chdir to projectdir: #{@projectdir}&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@pkgyaml</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Project is missing a configuration file: #{File.basename(@pkgyaml)} not found&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@builddir</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Project directory is missing a build dir: #{@builddir}&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-identifier">source</span> = <span class="ruby-node">&quot;#{@builddir + '/' + @pkginfo[:title] + '-' + @pkginfo[:version] + '.pkg'}&quot;</span>
+    <span class="ruby-identifier">target</span> = <span class="ruby-node">&quot;#{@pkginfo[:title] + '_' + @pkginfo[:version] + '.dmg'}&quot;</span>
+    <span class="ruby-identifier">target</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\s/</span>, <span class="ruby-value str">&quot;_&quot;</span>)
+    <span class="ruby-identifier">target</span> = <span class="ruby-node">&quot;#{@builddir + '/' + target}&quot;</span>
+    
+
+    <span class="ruby-identifier">cmd</span> = [<span class="ruby-constant">HDIUTIL</span>,
+      <span class="ruby-value str">' create '</span>,
+      <span class="ruby-comment cmt"># '-verbose ',</span>
+      <span class="ruby-value str">'-srcfolder '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{source}\&quot;&quot;</span>,
+      <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{target}\&quot;&quot;</span>
+      ]
+        
+    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">source</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Rolling up: #{source}&quot;</span>
+      <span class="ruby-comment cmt"># puts &quot;Command: #{cmd}&quot;</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>(<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>))
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;There was a problem creating the disk image...&quot;</span>)
+        <span class="ruby-identifier">exit</span> <span class="ruby-identifier">$?</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;There's nothing to package: #{source}&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+  
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,4 @@
+#!/bin/bash
+# A package postinstall script
+
+exit 0

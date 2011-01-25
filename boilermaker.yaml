@@ -1,0 +1,25 @@
+--- 
+:created: "2009-11-16T19:06:48-08:00"
+:org: IT Services - Vancouver Campus
+:title: Boilermaker
+:min_target_os_version: "10.4"
+:version: 0.4.9
+:license: This package may contain software licensed under both proprietary and open source licensing contracts. This installer and the files it contains may not be redistributed under any circumstances. Please do not copy or redistribute this software without express permission of the package maintainer. This package is strictly intended for internal use only.
+:blurb: Boilermaker will help you to normalize your workflow and make package creation simple and efficient.
+:suggested_perms: "true"
+:edited_by: bcw
+:company: Simon Fraser University
+:overview: Installs Boilermaker, a Mac OS X packaging workflow utility.
+:verbose: "true"
+:creator: bcw
+:id: ca.sfu.its.boilermaker.pkg
+:details: 
+- Main components installed to /Library/Ruby/Site/1.8/boilermaker.
+- Symlinks created at /usr/local/bin/boilermaker, /usr/local/bin/bm, /usr/local/bin/bmdocs.
+- Boilermaker makes it simple to create Mac OS X packages in a normalized and extensible fashion.
+- Used in conjuction with revision control, Boilermaker can be an extremely helpful and powerful utility.
+:filter: 
+- .DS_Store
+- .*~
+- .DO_NOT_DELETE_ME
+:lastedit: "2010-01-26T15:10:52-08:00"

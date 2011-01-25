@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>method_missing (BoilermakerOptions)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File boilermakerlib.rb, line 329</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">m</span>)
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">m</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:createproj</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">:projectdir</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-keyword kw">true</span>
+    
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:quickpkg</span>
+      <span class="ruby-comment cmt"># raise BoilerMakerErr.new(&quot;Option -Q: This option is unimplemented.&quot;) </span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:quickpkg</span>]
+      
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:projectdir</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:createproj</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:tconvert</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:fetch</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:package</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:boil</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:rollup</span>]
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: This flag is only useful when combined with: -C, -t, -f or -p&quot;</span>) 
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>])
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:createproj</span>]
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;No such file or dir: #{@args[m]}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>])
+      <span class="ruby-keyword kw">end</span>
+      
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:ktcheck</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:createproj</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:projectdir</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:tconvert</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:fetch</span>]
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: This flag is only useful when combined with: -c, -h or -w&quot;</span>) 
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: Use the -h to specify a Radmind server host&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:radhost</span>]
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+      
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:tconvert</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>])
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;No such file or dir: #{@args[m]}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>])
+        
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:fetch</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: Use the -h to specify a Radmind server host&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:radhost</span>]
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>])
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;No such file or dir: #{@args[m]}&quot;</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>])
+    
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:radhost</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:ktcheck</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:fetch</span>]
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: This flag is only useful when combined with: -K or -f&quot;</span>) 
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:boil</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+      
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:package</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:rollup</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+    
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:secure</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:ktcheck</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:fetch</span>]
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: This flag is only useful when combined with: -K or -f&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:cksum</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:ktcheck</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">:fetch</span>]
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">BoilerMakerErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Option --#{m}: This flag is only useful when combined with: -K or -f&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-ivar">@args</span>[<span class="ruby-identifier">m</span>] = <span class="ruby-ivar">@options</span>[<span class="ruby-identifier">m</span>]
+    
+    <span class="ruby-keyword kw">end</span>
+        
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

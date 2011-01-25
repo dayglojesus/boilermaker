@@ -1,0 +1,13 @@
+== TODO
+
+- Add a time delta to run method in main
+
+- Get boilerpate script generation happening
+
+- Get Boilermaker to split on large pkgroot dirs
+
+- Get YAML up to snuff:
+  1. needs to be able store comments
+
+- Get a user level ~/.bmrc working
+

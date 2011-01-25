@@ -1,0 +1,49 @@
+QUICK TUTORIAL
+
+You must complete the installation before completing the tutorial.
+
+1. Open Terminal.app
+2. Type: bm -C ./foobar
+3. Type: cd ./foobar
+4. Optional
+	4a. Edit: foobar.yaml
+		-- Edit the YAML to your liking
+	4b. Type: mkdir -p pkgroot/tmp
+		-- pkgroot dir represents the root of the target OS (ie. "/tmp")
+		-- this is where you would stage your payload
+	4c. Add some files to the new tmp folder
+		-- Type: touch pkgroot/tmp/my.boilermaker.payload
+5. Type: bm -b
+6. Type: sudo bm -p
+7. Type: bm -r
+
+You have now built a standard Mac OS X package, and have prepared it for distribution
+by rolling it into a Disk Image.
+
+
+ANATOMY OF A BOILERMAKER PROJ DIRECTORY
+
+./build: This is where your actual Mac OS X packages land
+-- Whenever you perform a boilermaker 'build' operation, the subsequent .pkg will land
+in this directory.
+
+./foobar.yaml: The boilermaker project config file
+-- A YAML file which contains all the variables and info about your package.
+
+./pkgroot: The staging area for your package's payload
+-- The pkgroot directory represents the root of your package's target OS.
+-- Example: ./pkgroot/Applications/Foobar.app would be installed as: /Applications/Foobar.app
+
+./resources: Assorted resources related to your package
+-- This directory can contain an assortment of resources related to your package. Extra scripts,
+images, localizations, etc. all go in here.
+-- It can also be used a pre-staging area. Example: you do not wish to create a static pkgroot 
+structure, but instead intend to use a script to copy items from a another location. You could
+use a sub-dir the resources dir as your source (ie. ./resources/pkgpayload).
+-- The default background.gif is also stored here. This item is copied out of
+/Library/Ruby/Site/1.8/boilermaker/resources anytime a new project is instantiated. You may replace 
+this image with an image of your choosing. The size of the image should be 622 x 418 pixels.
+
+./scripts: Used to store your package scripts
+-- Boilermaker also populates this directory with empty scripts. You may edit them to your liking or
+delete any or all of them.

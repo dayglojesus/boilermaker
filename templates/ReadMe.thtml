@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title><%= @pkginfo[:title] + "-" + @pkginfo[:version] %></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="949.54">
+  <style type="text/css">
+    p.p1 {margin: 3.0px 0.0px 3.0px 0.0px; text-align: center; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 10.0px Helvetica}
+    p.p5 {margin: 0.0px 0.0px 3.0px 0.0px; text-align: center; font: 14.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p5"><b>README<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b>for<span class="Apple-converted-space"> </span></b></p>
+<p class="p1"><b><%= @pkginfo[:title] + " - " + @pkginfo[:version] %></b></p>
+<p class="p1"><b><%= DateTime.parse(@pkginfo[:lastedit]).strftime("%B %d, %Y.") %></b></p>
+<p class="p2"><br></p>
+<p class="p3"><b>Warning</b></p>
+<p class="p2"><br></p>
+<p class="p3">THIS PACKAGE MAY CONTAIN INFORMATION THAT IS SENSITIVE<span class="Apple-converted-space"> </span></p>
+<p class="p3"> IN NATURE AND CAN MAKE SUBSTANTIAL CHANGES TO YOUR SYSTEM.</p>
+<p class="p2"><br></p>
+<p class="p3">USE CAUTION WHEN INSTALLING THIS PACKAGE.</p>
+<p class="p2"><br></p>
+<p class="p3"><b>Overview</b></p>
+<p class="p2"><br></p>
+<p class="p3"><%= @pkginfo[:overview].collect { |x| '&#x2022; ' + x + '<br>' } %></p>
+<p class="p2"><br></p>
+<p class="p3"><b>Details</b></p>
+<p class="p2"><br></p>
+<p class="p3"><%= @pkginfo[:details].collect { |x| '&#x2022; ' + x + '<br>' } %></p>
+<p class="p2"><br></p>
+<p class="p3"><b><%= "Created by " + @pkginfo[:creator] + " at " + @pkginfo[:org] + ", "  + @pkginfo[:company] + "." %></b></p>
+<p class="p2"><br></p>
+<p class="p4"><%= TAG %></p>
+</body>
+</html>

@@ -1,0 +1,20 @@
+Boilermaker relies on Apple's Packagemaker and as such, it is subject to the same limitations. Bugs
+that are expressed by Apple's utility will also affect boilermaker.
+
+Once installed, boilermaker can be invoked from the commandline as:
+
+	boilermaker
+
+Or simply...
+
+	bm
+
+Boilermaker help can be obtained by running the utility without any arguments, OR by specifying:
+
+boilermaker --help
+
+Documentation on the code base can be obtained by running:
+
+bmdocs
+
+-- Brian

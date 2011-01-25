@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>ready? (QuickPkg)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File quickpkg.rb, line 141</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ready?</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\nQuick packaging: #{@source}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\n\tPackage Title: #{@pkginfo[:title]}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\tPackage ID: #{@pkginfo[:id]}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;\tPackage Version: #{@pkginfo[:version]}&quot;</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;\n\tWhen complete Boilermaker will place the completed dmg file on your Desktop.&quot;</span>
+    <span class="ruby-identifier">printf</span> <span class="ruby-value str">&quot;\n\t--- Is this information correct? Press y to confirm, or any another key to exit: &quot;</span>
+    <span class="ruby-identifier">answer</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">answer</span> 
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;y&quot;</span>
+      <span class="ruby-ivar">@ok</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-ivar">@ok</span> = <span class="ruby-keyword kw">false</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">QuickPkgErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Exiting at user request...&quot;</span>)
+    <span class="ruby-keyword kw">end</span>    
+    <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@ok</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

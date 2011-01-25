@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>stagepayload (QuickPkg)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File quickpkg.rb, line 163</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stagepayload</span>(<span class="ruby-identifier">pkgroot</span>)
+    
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Creating an applications dir in pkgroot: #{pkgroot + APPS}&quot;</span>
+      <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-node">&quot;#{pkgroot + APPS}&quot;</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Copying payload to pkgroot: #{@source} --&gt; #{pkgroot + APPS}&quot;</span>
+      <span class="ruby-comment cmt"># FILEUTILS WILL NOT COPY MAC EXT. ATTRIBS!!!</span>
+      <span class="ruby-comment cmt"># FileUtils.cp_r(@source, pkgroot + APPS)</span>
+      <span class="ruby-identifier">cmd</span> = [<span class="ruby-value str">'/bin/cp'</span>,
+        <span class="ruby-value str">' -R '</span>,
+        <span class="ruby-node">&quot;\&quot;#{@source}\&quot;&quot;</span>,
+        <span class="ruby-value str">' '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{pkgroot + APPS}\&quot;&quot;</span>
+        ]
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>(<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>))
+         <span class="ruby-identifier">raise</span> <span class="ruby-constant">QuickPkgErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;There was a problem copying the source tree...&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-comment cmt"># Change the file ownership to root:admin</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Setting file and folder ownership to root:admin...&quot;</span>
+      <span class="ruby-identifier">cmd</span> = [<span class="ruby-value str">'/usr/sbin/chown '</span>,
+        <span class="ruby-value str">'-R '</span>,
+        <span class="ruby-value str">'root:admin '</span>,
+        <span class="ruby-node">&quot;\&quot;#{pkgroot + APPS}\&quot;&quot;</span>,
+        <span class="ruby-value str">' &gt;&amp;/dev/null'</span>
+        ]
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>(<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>))
+         <span class="ruby-identifier">raise</span> <span class="ruby-constant">QuickPkgErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;There was a problem setting ownership on the source tree...&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+            
+      <span class="ruby-comment cmt"># Ensure no writable bits are set inside the pkgroot</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Correcting permissions on pkgroot...&quot;</span>
+      <span class="ruby-identifier">cmd</span> = [<span class="ruby-value str">'/bin/chmod '</span>,
+        <span class="ruby-value str">'-R '</span>,
+        <span class="ruby-value str">'o-w '</span>,
+        <span class="ruby-node">&quot;\&quot;#{pkgroot + APPS}\&quot;&quot;</span>,
+        <span class="ruby-value str">' &gt;&amp;/dev/null'</span>
+        ]
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>(<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>))
+         <span class="ruby-identifier">raise</span> <span class="ruby-constant">QuickPkgErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;There was a problem setting permissions on the source tree...&quot;</span>)
+      <span class="ruby-keyword kw">end</span>
+      
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-comment cmt">#StandardError</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;ERROR&quot;</span>
+      <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{self.class}: #{$!}&quot;</span>
+      <span class="ruby-identifier">exit</span> <span class="ruby-identifier">$?</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

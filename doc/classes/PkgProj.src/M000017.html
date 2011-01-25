@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>prep (PkgProj)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File pkgproj.rb, line 69</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">prep</span> (<span class="ruby-identifier">projectdir</span> = <span class="ruby-ivar">@projectdir</span>)
+    
+    <span class="ruby-ivar">@projectdir</span> = <span class="ruby-constant">Pathname</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">projectdir</span>)
+
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@projectdir</span>.<span class="ruby-identifier">exist?</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Creating Project Directory: #{@projectdir}&quot;</span>
+        <span class="ruby-ivar">@projectdir</span>.<span class="ruby-identifier">mkpath</span>
+        <span class="ruby-ivar">@projectdir</span> = <span class="ruby-ivar">@projectdir</span>.<span class="ruby-identifier">realpath</span>
+        [<span class="ruby-ivar">@pkgroot</span>, <span class="ruby-ivar">@resources</span>, <span class="ruby-ivar">@scripts</span>, <span class="ruby-ivar">@builddir</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> 
+          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Creating sub-dir: #{x}&quot;</span>
+          <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">x</span>)
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Copying resources: #{RESOURCES}&quot;</span>
+        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp_r</span>(<span class="ruby-constant">RESOURCES</span>, <span class="ruby-ivar">@projectdir</span>)
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Copying scripts: #{SCRIPTS}&quot;</span>
+        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp_r</span>(<span class="ruby-constant">SCRIPTS</span>, <span class="ruby-ivar">@projectdir</span>)
+
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@pkgyaml</span>)
+          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Copying YAML: #{TEMPLATES}&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/config.yaml'</span>
+          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp</span>(<span class="ruby-constant">TEMPLATES</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/config.yaml'</span>, <span class="ruby-ivar">@pkgyaml</span>)
+          <span class="ruby-comment cmt"># updateyaml(@pkginfo)</span>
+        <span class="ruby-keyword kw">end</span>
+        
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">StandardError</span>
+        <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{self.class}: #{$!}&quot;</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">$!</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Directory \&quot;#{@projectdir}\&quot; already exists&quot;</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">$!</span>
+    <span class="ruby-keyword kw">end</span>
+    
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

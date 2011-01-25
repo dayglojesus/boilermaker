@@ -1,0 +1,117 @@
+bm version 0.4.9
+
+BOILERMAKER
+===========
+
+Synopsis
+--------
+Overview
+ A simple utility for working with Apple's Packagemaker. Boilermaker
+ makes it easy to design consistent & maintainable Packagemaker
+ workflows by automatically generating boilerplate resource files
+ based on a simple YAML configuration file. Once configured, you can
+ begin building or distributing installers using simple commands.
+
+Revision Control
+ When used in conjunction with a common revision control system like
+ GIT, Boilermaker can be a powerful allie.
+
+Radmind
+ In addition, Boilermaker also contains a special feature set for
+ fetching and packaging Radmind transcripts. See below for examples
+ on usage.
+
+
+Usage
+-----
+ Usage: boilermaker [options]
+ --Execute boilermaker without options to show usage details.
+
+
+Options
+-------
+ -Q, --quickpkg <app>             Create a quick application distribution
+ -C, --createproj <dir>           Create a project directory
+ -D, --projectdir <dir>           Specify a project directory to work with (default is $PWD)
+ -K, --ktcheck                    Update the Radmind client command file
+ -t, --tconvert <transcript>      Convert a createable transcript to an appliable transcript
+ -f, --fetch <transcript>         Fetch a converted Radmind transcript
+ -h, --radhost <host>             Specify the Radmind server host
+ -b, --boil                       Generate boilerplate
+ -p, --package                    Package your project
+ -r, --rollup                     Create a disk image of your package
+ -w, --secure <level>             Use security level 0, 1 or 2 for Radmind operations
+ -c, --cksum <hash>               Update the Radmind client command file
+ -v, --version                    Display version
+     --help                       Show this message
+
+
+Examples
+--------
+Quick Packaging
+
+ Quick packaging allows you to generate a pkgdmg from:
+
+   1. An application bundle (ie. /Applications/Firefox.app)
+   2. A folder containing an application bundle (ie. /Applications/Pacifist).
+
+NOTE: When packaging a folder, it must contain exactly one application bundle.
+
+ The resulting dmg file will contain a Mac OS X 10.4 style package. When complete, Boilermaker
+ will place the file on your Desktop for easy access.
+
+Create a quick application distribution
+   boilermaker -Q /path/to/my_application.app
+   boilermaker -Q /Applications/Firefox.app
+   boilermaker -Q ~/Downloads/Cyberduck.app
+
+Create a quick distribution from an application's parent directory
+   boilermaker -Q /Applications/Pacifist
+
+NOTE: ALL BoilermakerQuick packages are non-relocatable.
+
+Project Creation
+
+Create a new Boilermaker project
+   boilermaker -C ./mynewproject
+
+Standard Operations
+
+ All Boilermaker operations will assume $PWD if the -D flag is not specified.
+
+Generate boilerplate resource files
+   boilermaker -D ./mynewproject -b
+   boilermaker -b
+
+Package up the project's pkgroot
+   boilermaker -D ./mynewproject -p
+   boilermaker -p
+
+Roll-up the package into a disk image
+   boilermaker -D ./mynewproject -r
+   boilermaker -r
+
+Radmind Features
+
+Update the Radmind command file
+   boilermaker -K -w1 -csha1 -hhost.radmind.com
+
+Convert a Radmind transcript
+   boilermaker -D ./mynewproject -t /var/radmind/client/foo.T
+   boilermaker -t /var/radmind/client/foo.T
+
+Fetch a Radmind transcript
+   boilermaker -D ./mynewproject -f ./mynewproject/foo.T -w1 -csha1 -hhost.radmind.com
+   boilermaker -f ./mynewproject/foo.T -w1 -csha1 -hhost.radmind.com
+
+
+Author
+------
+  Brian Warsing
+
+
+Copyright
+---------
+  Copyright © 2010 Simon Fraser University. Licensed under the Apache License:
+  http://www.apache.org/licenses/LICENSE-2.0
+

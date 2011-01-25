@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>package (PkgProj)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File pkgproj.rb, line 207</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">package</span>(<span class="ruby-identifier">args</span>)
+    <span class="ruby-ivar">@ok</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-identifier">pkgroot</span> = <span class="ruby-ivar">@projectdir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/pkgroot'</span>
+    
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span>(<span class="ruby-ivar">@projectdir</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Could not chdir to projectdir: #{@projectdir}&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-ivar">@pkgyaml</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Project is missing a configuration file: #{File.basename(@pkgyaml)} not found&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">pkgroot</span>)
+      <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Project Directory: #{@projectdir}&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;Project directory is missing a pkgroot: #{pkgroot}&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-identifier">printf</span> <span class="ruby-value str">&quot;\nOK to start packaging?  Press y to confirm, or another key to exit: &quot;</span>
+    <span class="ruby-identifier">answer</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">answer</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;y&quot;</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Exiting at user request...&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">else</span>    
+      <span class="ruby-comment cmt"># Define output target and delete if already present</span>
+      <span class="ruby-identifier">target</span> = <span class="ruby-value str">'&quot;'</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@builddir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/'</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@pkginfo</span>[<span class="ruby-identifier">:title</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'-'</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@pkginfo</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'.pkg'</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'&quot;'</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">target</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>,<span class="ruby-value str">''</span>))
+        <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Removing previous target: #{target}&quot;</span>
+        <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">target</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&quot;/</span>,<span class="ruby-value str">''</span>))
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># Construct the PackageMaker args      </span>
+      <span class="ruby-identifier">cmd</span> = [<span class="ruby-constant">PKGMAKER</span>,
+        <span class="ruby-value str">'-r '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{@pkgroot}\&quot;&quot;</span>,
+        <span class="ruby-value str">'-t '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{@pkginfo[:title]}\&quot;&quot;</span>,
+        <span class="ruby-value str">'-i '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{@pkginfo[:id]}&quot;</span>,
+        <span class="ruby-value str">'-n '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;#{@pkginfo[:version]}&quot;</span>,
+        <span class="ruby-value str">'-e '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{@resources}\&quot;&quot;</span>,
+        <span class="ruby-value str">'-s '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{@scripts}\&quot;&quot;</span>,
+        <span class="ruby-value str">'-g '</span> <span class="ruby-operator">+</span> <span class="ruby-node">&quot;\&quot;#{@pkginfo[:min_target_os_version]}\&quot;&quot;</span>,
+        <span class="ruby-value str">'-o '</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">target</span>
+        ]
+      
+      <span class="ruby-identifier">cmd</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'-m '</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@pkginfo</span>[<span class="ruby-identifier">:suggested_perms</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'false'</span>
+      <span class="ruby-identifier">cmd</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'-v '</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@pkginfo</span>[<span class="ruby-identifier">:verbose</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'false'</span>
+      <span class="ruby-identifier">cmd</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@pkginfo</span>[<span class="ruby-identifier">:filter</span>].<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">exp</span><span class="ruby-operator">|</span> <span class="ruby-value str">'-x '</span> <span class="ruby-operator">+</span>  <span class="ruby-node">&quot;\'#{exp}\'&quot;</span> }
+      
+      <span class="ruby-comment cmt"># puts cmd.join(&quot; &quot;)</span>
+      <span class="ruby-comment cmt"># exit 0      </span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">system</span>(<span class="ruby-identifier">cmd</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot; &quot;</span>))
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">PkgProjErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;There was a problem building the package...&quot;</span>)
+        <span class="ruby-identifier">exit</span> <span class="ruby-identifier">$?</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-comment cmt"># Finish up with some package Info.plist munging</span>
+      <span class="ruby-identifier">target</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/&quot;/</span>,<span class="ruby-value str">&quot;&quot;</span>)
+      <span class="ruby-identifier">setpkgoptions</span>(<span class="ruby-identifier">target</span>, <span class="ruby-ivar">@pkginfo</span>)
+    <span class="ruby-keyword kw">end</span>
+    
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

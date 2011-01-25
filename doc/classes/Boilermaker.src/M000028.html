@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parsed_options? (Boilermaker)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File boilermakerlib.rb, line 66</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parsed_options?</span>
+      <span class="ruby-ivar">@optparse</span> = <span class="ruby-constant">OptionParser</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">opts</span><span class="ruby-operator">|</span>
+        
+        <span class="ruby-comment cmt"># A usage banner</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">banner</span> = <span class="ruby-node">&quot;Usage: #{File.basename($0)} [options]&quot;</span>
+        
+        <span class="ruby-comment cmt"># Returns the current version of the tool</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_tail</span>(<span class="ruby-value str">'-v'</span>, <span class="ruby-value str">'--version'</span>, <span class="ruby-value str">&quot;Display version&quot;</span>)    { <span class="ruby-identifier">output_version</span> ; <span class="ruby-identifier">exit</span> <span class="ruby-value">0</span> }
+        
+        <span class="ruby-comment cmt"># Quick distribution</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:quickpkg</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-Q'</span>, <span class="ruby-value str">'--quickpkg &lt;app&gt;'</span>, <span class="ruby-value str">'Create a quick application distribution (simple)'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">app</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:quickpkg</span>] = <span class="ruby-identifier">app</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-comment cmt"># Create a new project</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:createproj</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_head</span>( <span class="ruby-value str">'-C'</span>, <span class="ruby-value str">'--createproj &lt;dir&gt;'</span>, <span class="ruby-constant">String</span>, <span class="ruby-value str">'Create a project directory (advanced)'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">proj</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:createproj</span>] = <span class="ruby-identifier">proj</span>
+        <span class="ruby-keyword kw">end</span>
+  
+        <span class="ruby-comment cmt"># Specify an existing project</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:projectdir</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_head</span>( <span class="ruby-value str">'-D'</span>, <span class="ruby-value str">'--projectdir &lt;dir&gt;'</span>, <span class="ruby-constant">String</span>, <span class="ruby-value str">'Specify a project directory to work with'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:projectdir</span>] = <span class="ruby-identifier">dir</span>
+        <span class="ruby-keyword kw">end</span>
+    
+        <span class="ruby-comment cmt"># Update the Radmind command file</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:ktcheck</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-K'</span>, <span class="ruby-value str">'--ktcheck'</span>, <span class="ruby-value str">'Update the Radmind client command file'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">check</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:ktcheck</span>] = <span class="ruby-identifier">check</span>
+          <span class="ruby-comment cmt"># puts &quot;Updating the client's command file: #{options[:ktcheck]}&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Convert a Radmind transcript</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:convert</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-t'</span>, <span class="ruby-value str">'--tconvert &lt;transcript&gt;'</span>, <span class="ruby-value str">'Convert a createable transcript to an appliable transcript'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">transcript</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:tconvert</span>] = <span class="ruby-identifier">transcript</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Fetch a converted Radmind loadset</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:fetch</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-f'</span>, <span class="ruby-value str">'--fetch &lt;transcript&gt;'</span>, <span class="ruby-value str">'Fetch a converted Radmind transcript'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">transcript</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:fetch</span>] = <span class="ruby-identifier">transcript</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-comment cmt"># Specify a radmind host</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:radhost</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-h'</span>, <span class="ruby-value str">'--radhost &lt;host&gt;'</span>, <span class="ruby-value str">'Specify the Radmind server host'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">host</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:radhost</span>] = <span class="ruby-identifier">host</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Generate the boilerplate</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:boil</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-b'</span>, <span class="ruby-value str">'--boil'</span>, <span class="ruby-value str">'Generate boilerplate '</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">boil</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:boil</span>] = <span class="ruby-identifier">boil</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-comment cmt"># Package up the project's pkgroot</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:package</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">'-p'</span>, <span class="ruby-value str">'--package'</span>, <span class="ruby-value str">'Package your project '</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">package</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:package</span>] = <span class="ruby-identifier">package</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Archive the package inside a disk image</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:rollup</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value str">'-r'</span>, <span class="ruby-value str">'--rollup'</span>, <span class="ruby-value str">'Create a disk image of your package '</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rollup</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:rollup</span>] = <span class="ruby-identifier">rollup</span>
+        <span class="ruby-keyword kw">end</span>
+                        
+        <span class="ruby-comment cmt"># Use Radmind security?</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:security</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-w'</span>, <span class="ruby-value str">'--secure &lt;level&gt;'</span>, <span class="ruby-value str">'Use security level 0, 1 or 2 for Radmind operations'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">level</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:secure</span>] = <span class="ruby-identifier">level</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-comment cmt"># Use Radmind checksums</span>
+        <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:cksum</span>] = <span class="ruby-keyword kw">nil</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on</span>( <span class="ruby-value str">'-c'</span>, <span class="ruby-value str">'--cksum &lt;hash&gt;'</span>, <span class="ruby-value str">'Update the Radmind client command file'</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hash</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:cksum</span>] = <span class="ruby-identifier">hash</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-comment cmt"># Prints a detailed help message</span>
+        <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">on_tail</span>(<span class="ruby-value str">'--help'</span>, <span class="ruby-value str">'Show detailed help and information'</span>) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">output_version</span>
+          <span class="ruby-identifier">output_help</span>
+        <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-comment cmt"># Parse the options</span>
+      <span class="ruby-comment cmt"># * A non-successful parse operation presents a list of the acceptable options</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-ivar">@optparse</span>.<span class="ruby-identifier">parse!</span>
+      <span class="ruby-keyword kw">rescue</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">error</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-identifier">error</span>.<span class="ruby-identifier">message</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span>
+        <span class="ruby-identifier">puts</span> <span class="ruby-ivar">@optparse</span>
+        <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-comment cmt"># Pre-process the options before we validate them</span>
+      <span class="ruby-identifier">process_options</span>
+      <span class="ruby-keyword kw">true</span>
+  
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

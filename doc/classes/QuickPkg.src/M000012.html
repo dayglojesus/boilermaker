@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>crunch (QuickPkg)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File quickpkg.rb, line 217</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">crunch</span>(<span class="ruby-identifier">pkginfo</span>, <span class="ruby-identifier">pkgyaml</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exists?</span>(<span class="ruby-identifier">pkgyaml</span>)
+      <span class="ruby-identifier">store</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">pkgyaml</span>))
+      <span class="ruby-identifier">store</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">pkginfo</span>)
+      
+      <span class="ruby-identifier">pkginfo2yaml</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">pkgyaml</span>, <span class="ruby-value str">'w'</span>)
+    
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pkginfo</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:creator</span>)
+        <span class="ruby-identifier">pkginfo</span>[<span class="ruby-identifier">:creator</span>] = <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getlogin</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pkginfo</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">:created</span>) 
+        <span class="ruby-identifier">pkginfo</span>[<span class="ruby-identifier">:created</span>] = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">xmlschema</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">pkginfo</span>[<span class="ruby-identifier">:edited_by</span>] = <span class="ruby-constant">Etc</span>.<span class="ruby-identifier">getlogin</span>
+      <span class="ruby-identifier">pkginfo</span>[<span class="ruby-identifier">:lastedit</span>] = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">xmlschema</span>
+    
+      <span class="ruby-identifier">pkginfo2yaml</span>.<span class="ruby-identifier">puts</span> <span class="ruby-identifier">store</span>.<span class="ruby-identifier">to_yaml</span>
+      <span class="ruby-identifier">pkginfo2yaml</span>.<span class="ruby-identifier">close</span>
+      
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">store</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

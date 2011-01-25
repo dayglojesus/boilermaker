@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>finish (QuickPkg)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File quickpkg.rb, line 49</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">finish</span>(<span class="ruby-identifier">projectdir</span>)
+    <span class="ruby-identifier">source</span> =  <span class="ruby-identifier">projectdir</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'/build/'</span> <span class="ruby-operator">+</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">basename</span>(<span class="ruby-identifier">projectdir</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'_'</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@pkginfo</span>[<span class="ruby-identifier">:version</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">'.dmg'</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Copying finished dmg file to your Desktop...&quot;</span>
+    <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">cp_r</span>(<span class="ruby-identifier">source</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-value str">&quot;~/Desktop&quot;</span>))
+    <span class="ruby-identifier">printf</span> <span class="ruby-value str">&quot;\n\t--- Would you like to delete the quick project directory? Press y to confirm, or any another key to exit: &quot;</span>
+    <span class="ruby-identifier">answer</span> = <span class="ruby-identifier">gets</span>.<span class="ruby-identifier">chomp</span>
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">answer</span> 
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;y&quot;</span>
+      <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">projectdir</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">QuickPkgErr</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">&quot;Exiting at user request...&quot;</span>)
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>    
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
