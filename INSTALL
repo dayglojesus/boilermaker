@@ -1,3 +1,17 @@
-Run the install.sh as root.
+REQUIREMENTS
+
+This utility relies on Apple's packagemaker cmdline utility; packagemaker is part of the Apple Developer tools. Some features require the Radmind tools be installed.
+
+http://developer.apple.com/
+http://rsug.itd.umich.edu/software/radmind/
+
+INSTALL/UNINSTALL
+
+A pair of simple scripts to install and uninstall Boilermaker are provided.
+
+1. Open Terminal.app
+2. Type: cd <path to Boilermaker download directory>
+3. To install, Type: sudo ./install.sh
+4. To uninstall, Type: sudo ./uninstall.sh
 
 -- Brian
