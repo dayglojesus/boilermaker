@@ -8,7 +8,7 @@ fi
 
 # Install the code
 cp -R . "/Library/Ruby/Site/1.8/boilermaker"
-chown -R "/Library/Ruby/Site/1.8/boilermaker"
+chown -R root:admin "/Library/Ruby/Site/1.8/boilermaker"
 
 # Create some convenient symlinks for using Boilermaker
 mkdir -p /usr/local/bin

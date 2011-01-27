@@ -1,13 +1,14 @@
 #!/bin/bash
 # Installs boilermaker
 
-echo
+echo "???????????????????????????????"
 echo "???  Uninstall Boilermaker  ???"
+echo "???????????????????????????????"
 echo 
 echo "WARNING: This script will remove the entire contents of /Library/Ruby/Site/1.8/boilermaker"
 echo "If you have made any customizations of the code or resources, these changes will be lost."
 echo
-# echo "If you wish to continue, please type YES: "
+
 read -p "If you wish to continue, please type YES: "
 
 if [ "${REPLY}" != "YES" ];then
@@ -21,7 +22,7 @@ else
 	fi
 
 	# Remove the code
-	rm -rf . "/Library/Ruby/Site/1.8/boilermaker"
+	rm -rf "/Library/Ruby/Site/1.8/boilermaker"
 
 	# Remove some convenient symlinks for using Boilermaker
 	cd /usr/local/bin
